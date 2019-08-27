@@ -3,9 +3,9 @@
 }
 
 .btn-hover {
-  @apply bg-blue-700
+  @apply bg-blue-700;
 }
 
 .btn:hover {
-  @apply btn-hover
+  @apply btn-hover;
 }

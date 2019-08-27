@@ -4,7 +4,7 @@ declare const VERSION: string;
 
 
 @Component({
-  selector: 'app-root',
+  selector: 'blog-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

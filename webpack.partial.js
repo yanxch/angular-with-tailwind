@@ -1,3 +1,7 @@
+
+// ng serve --extra-webpack-config webpack.partial.js -o
+
+
 const webpack = require('webpack');
 
 module.exports = {

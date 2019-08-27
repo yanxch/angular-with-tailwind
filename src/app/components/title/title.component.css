@@ -1,0 +1,4 @@
+:host {
+  display: block;
+  @apply font-serif mx-auto max-w-2xl p-6 text-4xl text-gray-900;
+}

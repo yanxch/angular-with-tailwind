@@ -1,15 +1,40 @@
-<!--The content below is only a placeholder and can be replaced.-->
 
-<div class="max-w-sm mx-auto flex p-6 bg-white rounded-lg shadow-xl">
-  <div class="flex-shrink-1">
-    <img class="h-12 w-12" src="/assets/me.png" alt="ChitChat Logo">
-  </div>
-  <div class="ml-6 pt-1">
-    <h4 class="text-xl text-gray-900 leading-tight">ChitChat</h4>
-    <p class="text-base text-gray-600 leading-normal">You have a new message!</p>
-  </div>
-</div>
-<button class="btn">
-  Button
-</button>
+<blog-content>
+  <blog-title>Reusable Containers in Angular</blog-title>
+  <blog-sub-title>Get to know the power of thin containers</blog-sub-title>
+
+  <blog-text-container>
+    <blog-text>
+      This one will be a short post on the topic of container components. 
+      I tend to write stories that start with “Having fun with XYZ” but I think today 
+      I’m not going to have fun. Just kidding. The topics I write about are not just about having fun. 
+      So no fun today. I’m sorry.
+    </blog-text>
+    <br/>
+    <blog-text>
+        I started this post on the day I got released from two wisdom tooth. 
+        That was no fun. Hence the picture of food I would love to eat :)
+    </blog-text>
+    <blog-text>
+        There are many different terms being used that all try to differentiate between different kinds 
+        of components. Some have the same meaning, but I've got the feeling that every other developer 
+        has a little different view on their intended behavior. Let’s gather the terms:
+    </blog-text>
+    <br/>
+    <blog-text>
+      <ul class="list-disc ml-6 leading-loose">
+        <li>Dumb Component</li>
+        <li>Smart Component</li>
+        <li>Container Component</li>
+        <li>Presentational Component</li>
+        <li>Pure Component</li>
+        <li>Impure Component</li>
+        <li>Stateful Component</li>
+        <li>Stateless Component</li>
+        <li>Container Component</li>
+      </ul>
+    </blog-text>
+  </blog-text-container>
+</blog-content>
+
 <router-outlet></router-outlet>
