@@ -7,6 +7,7 @@ import {SubTitleComponent} from './components/subtitle/subtitle.component';
 import {TextComponent} from './components/text/text.component';
 import {TextContainerComponent} from './components/text-container/text-container.component';
 import {BlogContentComponent} from './components/blog-content/blog-content.component';
+import {CodeComponent} from './components/code/code.component';
 
 
 @NgModule({
@@ -16,13 +17,15 @@ import {BlogContentComponent} from './components/blog-content/blog-content.compo
     SubTitleComponent,
     TextContainerComponent,
     TextComponent,
-    BlogContentComponent
+    BlogContentComponent,
+    CodeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: []
 })
 export class AppModule { }

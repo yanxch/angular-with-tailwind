@@ -9,5 +9,5 @@ declare const VERSION: string;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular-with-tailwind: ' + VERSION;
+  title = 'angular-with-tailwind: ';
 }

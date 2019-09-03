@@ -24,9 +24,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/prismjs/themes/prism-solarizedlight.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/prismjs/prism.js"
+            ]
           },
           "configurations": {
             "production": {

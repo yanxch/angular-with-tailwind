@@ -1,4 +1,7 @@
 :host {
   display: block;
-  @apply font-serif mx-auto max-w-2xl p-6 pt-0 text-2xl text-gray-700;
+  font-family: "Landmark Regular A", "Landmark Regular B";
+  font-style: normal;
+  font-weight: 400;
+  @apply mx-auto max-w-2xl p-6 pt-0 text-2xl text-gray-700;
 }
