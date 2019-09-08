@@ -13,6 +13,8 @@
         "build": {
           "builder": "ngx-build-plus:browser",
           "options": {
+            "extraWebpackConfig": "webpack/webpack.partial.js",
+            "plugin": "~dist/out-tsc/loader/plugin.js",
             "outputPath": "dist/angular-with-tailwind",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -25,10 +27,11 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/prismjs/themes/prism-solarizedlight.css"
+              "src/shades-of-purple.css"
             ],
             "scripts": [
-              "node_modules/prismjs/prism.js"
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js"
             ]
           },
           "configurations": {
@@ -61,6 +64,8 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
+            "extraWebpackConfig": "webpack/webpack.partial.js",
+            "plugin": "~dist/out-tsc/loader/plugin.js",
             "browserTarget": "angular-with-tailwind:build"
           },
           "configurations": {
@@ -78,6 +83,8 @@
         "test": {
           "builder": "ngx-build-plus:karma",
           "options": {
+            "extraWebpackConfig": "webpack/webpack.partial.js",
+            "plugin": "~dist/out-tsc/loader/plugin.js",
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",

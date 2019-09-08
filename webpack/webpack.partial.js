@@ -5,22 +5,17 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const p = path.join(__dirname, 'myloader.js');
-console.log(p);
-
 module.exports = {
-    resolveLoader: {
-      alias: {
-        'my-loader': p
-      }
-    },
     module: {
       rules: [
         {
           test: /\.html$/,
           use: [
             {
-              loader: 'my-loader'
+              loader: path.resolve(__dirname, '../dist/out-tsc/loader/loader')
+            },
+            {
+              loader: 'raw-loader'
             }
           ]
         },
