@@ -5,5 +5,5 @@
   font-style: normal;
   font-weight: 400;
   
-  @apply mx-auto max-w-6xl p-6 text-6xl text-gray-900;
+  @apply mx-auto max-w-6xl p-6 text-6xl text-gray-900 text-center;
 }

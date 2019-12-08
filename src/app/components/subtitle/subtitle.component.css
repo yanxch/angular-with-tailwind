@@ -9,5 +9,5 @@
 
   margin-bottom: 1em;
 
-  @apply mx-auto max-w-2xl p-6 pt-0 text-2xl text-gray-700;
+  @apply mx-auto max-w-2xl p-6 pt-0 text-2xl text-gray-700 text-center;
 }

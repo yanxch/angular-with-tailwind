@@ -27,7 +27,9 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/shades-of-purple.css"
+              "src/shades-of-purple.css",
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
+
             ],
             "scripts": [
               "node_modules/prismjs/prism.js",

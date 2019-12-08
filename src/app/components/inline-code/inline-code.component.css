@@ -1,12 +1,7 @@
-:host {
-  display: block;
-
-}
-
 :host code {
   font-family: "Operator Mono A", "Operator Mono B";
   font-style: normal;
   font-weight: 400;
-
-
+  background: rgb(231, 230, 238, 1);
+  padding: 2px 4px;
 }

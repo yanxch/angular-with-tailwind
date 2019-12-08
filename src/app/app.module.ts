@@ -7,8 +7,10 @@ import {SubTitleComponent} from './components/subtitle/subtitle.component';
 import {TextComponent} from './components/text/text.component';
 import {TextContainerComponent} from './components/text-container/text-container.component';
 import {BlogContentComponent} from './components/blog-content/blog-content.component';
-import {CodeComponent} from './components/code/code.component';
+import {CodeComponent, RemoveLineNumberDirective} from './components/code/code.component';
 import {QuoteComponent} from './components/blog-quote/blog-quote.component';
+import {InlineCodeComponent} from './components/inline-code/inline-code.component';
+import {BlogImageComponent} from './components/blog-image/blog-image.component';
 
 
 @NgModule({
@@ -20,7 +22,10 @@ import {QuoteComponent} from './components/blog-quote/blog-quote.component';
     TextComponent,
     BlogContentComponent,
     CodeComponent,
-    QuoteComponent
+    QuoteComponent,
+    InlineCodeComponent,
+    RemoveLineNumberDirective,
+    BlogImageComponent
   ],
   imports: [
     BrowserModule,

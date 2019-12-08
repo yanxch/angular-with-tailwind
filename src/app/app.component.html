@@ -4,6 +4,7 @@
   <blog-sub-title>Get to know the power of thin containers</blog-sub-title>
 
   <blog-text-container>
+    <blog-image src="../assets/architecture.png"></blog-image>
     <blog-text>
       This one will be a short post on the topic of <b>container components</b>.
       I tend to write stories that start with “Having fun with XYZ” but I think today 
@@ -37,26 +38,30 @@
     </blog-text>
 
     <blog-quote>
-      A block quote.
+      A better quote looks better! Christian Janker
     </blog-quote>
 
 
-<blog-code>class Test {
-  private s: any;
-  private s: any;
-  private s: any;
-
-  hermann
-      maier
-          test {
-              tst
-               te
-          }
-}</blog-code>
+<blog-code highlightLines="4-7">function filterByLegCount(array, legCount) {
+  return filter(array, animal => animal.legs === legCount)
+}
+filterByLegCount(
+  [
+    {name: 'dog', legs: 4, mammal: true},
+    {name: 'dolphin', legs: 0, mammal: true},
+    {name: 'eagle', legs: 2, mammal: false},
+    {name: 'elephant', legs: 4, mammal: true},
+    {name: 'robin', legs: 2, mammal: false},
+    {name: 'cat', legs: 4, mammal: true},
+    {name: 'salmon', legs: 0, mammal: false},
+  ],
+  0,
+)
+</blog-code>
 
 <blog-text>
   There are many different terms being used that all try to differentiate between different kinds 
-  of components. Some have the same meaning, but I've got the feeling that every other developer 
+  of components. Some have the same meaning, <blog-inline-code>Test</blog-inline-code> I've got the feeling that every other developer 
   has a little different view on their intended behavior. Let’s gather the terms:
 </blog-text>
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, ContentChild, ElementRef} from '@angular/core';
+import {Component, OnInit, ContentChild, ElementRef, Input, Directive} from '@angular/core';
 
 
 // prismjs/themes/prism-dark.css
@@ -8,4 +8,17 @@ import {Component, OnInit, ContentChild, ElementRef} from '@angular/core';
   templateUrl: 'code.component.html',
   styleUrls: ['code.component.css']
 })
-export class CodeComponent {}
+export class CodeComponent {
+  @Input()
+  highlightLines;
+}
+
+@Directive({
+  selector: '[data-start]'
+})
+export class RemoveLineNumberDirective {
+
+  constructor(private element: ElementRef) {
+    console.log('FOUND LINE HIGHLIGHT: ' + element);
+  }
+}
