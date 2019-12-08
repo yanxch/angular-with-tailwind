@@ -5,6 +5,7 @@ import {Component, Input} from '@angular/core';
   template: `
     <div class="max-w-xl mx-auto m-5">
       <img [src]="src">
+      <p class="text-center text-sm">{{description}}</p>
     </div>
   `,
   styleUrls: ['blog-image.component.css']
@@ -12,4 +13,7 @@ import {Component, Input} from '@angular/core';
 export class BlogImageComponent {
   @Input()
   src: string;
+
+  @Input()
+  description: string;
 }
