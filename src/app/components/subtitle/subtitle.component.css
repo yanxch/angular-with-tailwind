@@ -3,5 +3,11 @@
   font-family: "Landmark Regular A", "Landmark Regular B";
   font-style: normal;
   font-weight: 400;
+
+  border-bottom: solid;
+  border-color: #70757ceb;
+
+  margin-bottom: 1em;
+
   @apply mx-auto max-w-2xl p-6 pt-0 text-2xl text-gray-700;
 }

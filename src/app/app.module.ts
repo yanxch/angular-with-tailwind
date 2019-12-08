@@ -8,6 +8,7 @@ import {TextComponent} from './components/text/text.component';
 import {TextContainerComponent} from './components/text-container/text-container.component';
 import {BlogContentComponent} from './components/blog-content/blog-content.component';
 import {CodeComponent} from './components/code/code.component';
+import {QuoteComponent} from './components/blog-quote/blog-quote.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {CodeComponent} from './components/code/code.component';
     TextContainerComponent,
     TextComponent,
     BlogContentComponent,
-    CodeComponent
+    CodeComponent,
+    QuoteComponent
   ],
   imports: [
     BrowserModule,

@@ -13,3 +13,7 @@
 .line-highlight {
   background-color: antiquewhite;
 }
+
+ul.blog {
+  @apply list-disc ml-6 leading-loose;
+}

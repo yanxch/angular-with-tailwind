@@ -1,5 +1,5 @@
 :host {
   display: block;
-  @apply font-serif mx-auto max-w-4xl p-6 text-xl text-gray-800 leading-relaxed;
+  @apply mx-auto max-w-4xl p-6 text-xl text-gray-800 leading-relaxed;
 }
 
