@@ -1,5 +1,5 @@
 
-const MATCH_BLOG_CODES = /(<blog-code>)([\s\S]*?)(<\/blog-code>)/g;
+const MATCH_BLOG_CODES = /(<blog-code.*>)([\s\S]*?)(<\/blog-code>)/g;
                         //    $1          $2         $3
                         // $1 Opening Code Tag
                         // $2 Anything between including newlines

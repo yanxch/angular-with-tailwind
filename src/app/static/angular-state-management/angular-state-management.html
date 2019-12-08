@@ -1,0 +1,67 @@
+<blog-content>
+    <blog-title>Angular State Management - Don't fear the boilderplate</blog-title>
+    <blog-sub-title>Fear tight coulpling!</blog-sub-title>
+
+    <blog-text-container>
+        <blog-text>
+            Many people rant about the boilerplate that is produced when introducing a redux based state management library in an Angular application. 
+            All I can respond to that is:
+        </blog-text>
+        <blog-quote>
+            Don't fear the boilerplate. Fear tight coupling!
+        </blog-quote>
+        <blog-text>
+            Though, I can understand those people, they are right in some way. 
+            State management can become hairy really fast. Especially if your are working in a bigger team with different levels of experience.
+        </blog-text>
+        <br />
+        <blog-text>
+            I think it’s not the boilerplate that causes the most pain. Sometimes it’s just the lack of clear separation of concerns. 
+            The absence of well defined smart- and dumb components. A state that is not well structured or simply too big to be handled 
+            by one container component. Complex subscriptions within the components that may combine multiple observables.
+            Add some side effects on the top. Add the routing information to the state. And suddenly:
+        </blog-text>
+        <blog-text>
+            There are many different terms being used that all try to differentiate between different kinds
+            of components. Some have the same meaning, but I've got the feeling that every other developer
+            has a little different view on their intended behavior. Let’s gather the terms:
+        </blog-text>
+
+        <br />
+        <blog-text>
+            <ul class="list-disc ml-6 leading-loose">
+                <li>Dumb Component</li>
+                <li>Smart Component</li>
+                <li>Container Component</li>
+                <li>Presentational Component</li>
+                <li>Pure Component</li>
+                <li>Impure Component</li>
+                <li>Stateful Component</li>
+                <li>Stateless Component</li>
+                <li>Container Component</li>
+            </ul>
+        </blog-text>
+
+
+        <blog-code highlightLines="1-5,7">class Test {
+            private s: any = 5;
+            private s: any = "Hermann";
+            private s: any;
+
+            hermann
+            maier
+            test {
+            tst
+            te
+            }
+            }</blog-code>
+
+        <blog-text>
+            There are many different terms being used that all try to differentiate between different kinds
+            of components. Some have the same meaning, but I've got the feeling that every other developer
+            has a little different view on their intended behavior. Let’s gather the terms:
+        </blog-text>
+
+
+    </blog-text-container>
+</blog-content>
