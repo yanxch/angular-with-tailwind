@@ -1,60 +1,51 @@
 <blog-content>
-    <blog-title>Angular State Management - Don't fear the boilderplate</blog-title>
+    <blog-title>Don't fear the boilerplate</blog-title>
     <blog-sub-title>Fear tight coulpling!</blog-sub-title>
 
     <blog-text-container>
         <blog-text>
             Many people rant about the boilerplate that is produced when introducing a redux based state management library in an Angular application. 
+        </blog-text>
+        <blog-text>
             All I can respond to that is:
         </blog-text>
         <blog-quote>
             Don't fear the boilerplate. Fear tight coupling!
         </blog-quote>
         <blog-text>
-            Though, I can understand those people, they are right in some way. 
-            State management can become hairy really fast. Especially if your are working in a bigger team with different levels of experience.
+            Though, I can understand those people, they are right in some way.<br />
+            <b>State management can become hairy really fast</b>. Especially if your are working in a bigger team with different levels of experience.
         </blog-text>
         <br />
         <blog-text>
-            I think it’s not the boilerplate that causes the most pain. Sometimes it’s just the lack of clear separation of concerns. 
+            But I think it’s not the boilerplate that causes the most pain. Sometimes it’s just the lack of clear separation of concerns. 
             The absence of well defined smart- and dumb components. A state that is not well structured or simply too big to be handled 
             by one container component. Complex subscriptions within the components that may combine multiple observables.
             Add some side effects on the top. Add the routing information to the state. And suddenly:
         </blog-text>
-        <blog-text>
-            There are many different terms being used that all try to differentiate between different kinds
-            of components. Some have the same meaning, but I've got the feeling that every other developer
-            has a little different view on their intended behavior. Let’s gather the terms:
-        </blog-text>
-
+        <blog-image src="../assets/architecture.png" description="Architecture gone wrong .. again"></blog-image>
         <br />
         <blog-text>
-            <ul class="list-disc ml-6 leading-loose">
-                <li>Dumb Component</li>
-                <li>Smart Component</li>
-                <li>Container Component</li>
-                <li>Presentational Component</li>
-                <li>Pure Component</li>
-                <li>Impure Component</li>
-                <li>Stateful Component</li>
-                <li>Stateless Component</li>
-                <li>Container Component</li>
-            </ul>
+            The code is not maintainable anymore. The Redux architecture had promised to solve the complexity of not knowing where the state of the application is coming from, but now it is really hard to follow the flow of data through your app as well. You get angry. You blame your state management decision or the one that made it.
         </blog-text>
+        <blog-quote>
+            Please hold on for a moment :)
+        </blog-quote>
+        <blog-text>
+            In this post I present an approach how you can “manage” your state management library. I will use ngrx in my examples, but it doesn’t really matter which redux based library you are using. The concept stays the same. Even plain old services could be used to hold your state.
+        </blog-text>
+        <br />
+        <blog-heading>1. Use Typescript</blog-heading>
+        <blog-text>
+            This is a no brainer for Angular developers. Once you have got used to it you don’t wanna miss it out any longer. We will use its power to define our typed actions and use them within reducers and effects. So coding errors occur during compile time as we develop and not during runtime. Let’s directly dive into our action types:
+        </blog-text>
+<blog-code>function filterByLegCount(array, legCount) {
+    
+    return filter(array, animal => animal.legs === legCount)
+}
 
 
-        <blog-code highlightLines="1-5,7">class Test {
-            private s: any = 5;
-            private s: any = "Hermann";
-            private s: any;
-
-            hermann
-            maier
-            test {
-            tst
-            te
-            }
-            }</blog-code>
+a</blog-code>
 
         <blog-text>
             There are many different terms being used that all try to differentiate between different kinds

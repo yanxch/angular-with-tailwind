@@ -1,0 +1,11 @@
+:host {
+  display: block;
+
+  font-family: "Archer SSm A", "Archer SSm B";
+  font-style: normal;
+  font-weight: 800;
+
+  margin-bottom: 1em;
+
+  @apply max-w-2xl  pt-0 text-2xl text-gray-700 text-left;
+}
