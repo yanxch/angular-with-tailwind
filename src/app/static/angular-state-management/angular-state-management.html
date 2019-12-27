@@ -1,26 +1,22 @@
 <blog-content>
     <blog-title>Don't fear the boilerplate</blog-title>
-    <blog-sub-title>Fear tight coulpling!</blog-sub-title>
+    <blog-sub-title>Fear tight coulpling!
+    </blog-sub-title>
 
     <blog-text-container>
-        <blog-text>
-            Many people rant about the boilerplate that is produced when introducing a redux based state management library in an Angular application. 
-        </blog-text>
-        <blog-text>
-            All I can respond to that is:
-        </blog-text>
+        <blog-summary>
+            Many developers rant about the boilerplate that is produced when introducing a redux based state management library in their Angular application. 
+            <br />I can understand those developers, they are right in some way, because every abstraction has its price and
+            state management can become hairy really fast. Especially if your are working in a large team with different levels of experience.
+            <br />But it's not the boilerplate you should be afraid of:
+        </blog-summary>
         <blog-quote>
-            Don't fear the boilerplate. Fear tight coupling!
+            <Ghost mood="shocked" color="#A6E191" size="50"></Ghost> Don't fear the boilerplate. Fear tight coupling!  
         </blog-quote>
         <blog-text>
-            Though, I can understand those people, they are right in some way.<br />
-            <b>State management can become hairy really fast</b>. Especially if your are working in a bigger team with different levels of experience.
-        </blog-text>
-        <br />
-        <blog-text>
-            But I think it’s not the boilerplate that causes the most pain. Sometimes it’s just the lack of clear separation of concerns. 
+            I think it’s not the boilerplate that causes the most pain. Sometimes it’s just the lack of clear separation of concerns. 
             The absence of well defined smart- and dumb components. A state that is not well structured or simply too big to be handled 
-            by one container component. Complex subscriptions within the components that may combine multiple observables.
+            by one container component. Add complex subscriptions within the components that may combine multiple observables.
             Add some side effects on the top. Add the routing information to the state. And suddenly:
         </blog-text>
         <blog-image src="../assets/architecture.png" description="Architecture gone wrong .. again"></blog-image>
@@ -37,22 +33,524 @@
         <br />
         <blog-heading>1. Use Typescript</blog-heading>
         <blog-text>
-            This is a no brainer for Angular developers. Once you have got used to it you don’t wanna miss it out any longer. We will use its power to define our typed actions and use them within reducers and effects. So coding errors occur during compile time as we develop and not during runtime. Let’s directly dive into our action types:
+            This is a no brainer for Angular developers. Once you have got used to it you don’t want to miss it out any longer. We will use its power to define our typed actions and use them within reducers and effects. So coding errors occur during compile time as we develop and not during runtime. Let’s directly dive into our action types:
         </blog-text>
-<blog-code>function filterByLegCount(array, legCount) {
-    
-    return filter(array, animal => animal.legs === legCount)
+<blog-code>/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*              TYPES                           */
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+type Type = {
+    readonly type: string;
 }
 
+type Payload = {
+    readonly payload: T;
+}
 
-a</blog-code>
+type Action  = Type & Payload;
+</blog-code>
 
         <blog-text>
-            There are many different terms being used that all try to differentiate between different kinds
-            of components. Some have the same meaning, but I've got the feeling that every other developer
-            has a little different view on their intended behavior. Let’s gather the terms:
+                This is a pretty straight forward definition of a generic <blog-inline-code>Action</blog-inline-code> that is combined of the types <blog-inline-code>Type</blog-inline-code> and <blog-inline-code>Payload</blog-inline-code>. 
+                So effectively every object with a structure of <blog-inline-code>{{'{'}} type, payload {{'}'}}</blog-inline-code> confirms to this type.
         </blog-text>
+        <br />
+        <blog-text>
+                We could use this now to create a function that returns a specific action and dispatch it then via NgRx <blog-inline-code>store.dispatch</blog-inline-code>:
+        </blog-text>
+<blog-code>// ActionCreator function
+function LoadCommits(user: Pick<User, 'username'>): Action<string> {
+    return {
+        type: '[Commits Page] Load Commits',
+        payload: user
+    };
+}
+
+const user = new User('yanxch');
+
+// within a container component where we injected the ngrx store
+this.store.dispatch(LoadCommits(user));    
+</blog-code>
+
+        <blog-text>
+            Fair enough. This works well for one action creator function, but it’s not really satisfying. We didn’t take reducers and effects under consideration and when the application grows we would have to write a lot of boilerplate and duplicate code.
+        </blog-text>
+        <br/>
+        <blog-text>
+            Let’s improve our design with some factory functions. They help us to cut the boilerplate down a little bit:
+        </blog-text>
+<blog-code>/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*              TYPES                           */
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// ...
+
+// A ActionCreator is a function that takes a payload and 
+// creates a dispatchable Action from it. 
+// The LoadCommits function from above is from type ActionCreator
+type ActionCreator<T> = {
+    (payload: T): Action<T>;
+};
+
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*              FACTORY FUNCTIONS               */
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+function createType(type: string): Type {
+    return { type };
+}
+
+function createPayload<T>(payload: T): Payload<T> {
+    return { payload };
+}
+
+function createAction<T>(type: Type, payload: Payload<T>): Action<T> {
+    return { 
+        type: type.type,
+        payload: payload.payload
+    };
+}
+
+function createActionCreator<T>(type: Type): ActionCreator<T> {
+    return (payload: T) => createAction(type, createPayload(payload));   
+}</blog-code>
+        
+        <blog-text>
+            We can now use <blog-inline-code>createType</blog-inline-code> and <blog-inline-code>createActionCreator</blog-inline-code> to define our actions:
+        </blog-text>
+<blog-code>export class CommitActions {
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*              TYPE DEFINITIONS                */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    static LOAD_COMMITS =           createType('[Commits List] Load Commits');
+    static LOAD_COMMITS_SUCCESS =   createType('[Commits List API] Load Commits Succeeded');
+    static LOAD_COMMITS_FAILURE =   createType('[Commits List API] Load Commits Failed');
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*              ACTION CREATORS                 */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    static LoadCommits = createActionCreator<Pick<User, 'username'>>(CommitActions.LOAD_COMMITS);
+    static LoadCommitsSuccess = createActionCreator<Commit[]>(CommitActions.LOAD_COMMITS_SUCCESS);
+    static LoadCommitsFailure = createActionCreator<{}>(CommitActions.LOAD_COMMITS_FAILURE);
+}</blog-code>
+        <blog-text>
+            This is an alternative to the class based action definition approach, which is widely adopted by NgRx users. Now we are ready to dispatch an action from a container component:
+        </blog-text>
+<blog-code>import { Store } from '@ngrx/store'; 
+import { CommitActions } from '../store/actions';
+
+@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer {
+    commits: Observable<Commit[]>;
+    
+    constructor(private store: Store<any>) {
+        this.store.dispatch(CommitActions.LoadCommits({ username: 'christian' }));
+    }
+}</blog-code>
+        <blog-text>
+            The next step to do is to set up the reducer. The cool part about the reducers and effects is that they support type checking during compile time as well.
+        </blog-text>
+ <blog-code>export interface CommitState {
+    commits: Commit[];
+}
+
+export const initialState: CommitState = {
+    commits: []
+};
+
+export function reducer(state = initialState, action: Action<any>) {
+    if (isAction(action, CommitActions.LoadCommits)) {
+        return state;
+    }
+    if (isAction(action, CommitActions.LoadCommitsSuccess)) {
+        const commits = [...action.payload];
+        return {
+            ...state,
+            commits
+        };
+    }
+    if (isAction(action, CommitActions.LoadCommitsFailure)) {
+        const commits = [];
+        return {
+            ...state,
+            commits
+        };
+    }
+
+    return state;
+}</blog-code>
+        <blog-text>
+        The <blog-inline-code>isAction</blog-inline-code> function does not only check if one of the expectedActions matches, it also allows us to use a typed payload within the if statements thanks to Typescript Type Guards.
+        </blog-text>
+<blog-code>function isAction<T>(action: Action<any>, ...expectedActionCreators: TypedActionCreator<T>[]): action is Action<T> {
+    return expectedActionCreators.some(expectedAction => expectedAction.type === action.type);
+}</blog-code>
+        <blog-text>
+        The type <blog-inline-code>TypedActionCreator</blog-inline-code> is a function that also keeps the action-type as a property on it. 
+        This feels a little bit hacky, but it allows us to do the <blog-inline-code>isAction</blog-inline-code> check without creating further boilerplate.   
+        </blog-text>
+<blog-code>/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*              TYPES                           */
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+type Type = {
+    readonly type: string;
+}
+
+type Payload<T> = {
+    readonly payload: T;
+}
+
+type Action<T>  = Type & Payload<T>;
+
+type ActionCreator<T> = {
+    (payload: T): Action<T>;
+};
+
+// TypedActionCreator is not only the function which takes the payload, 
+// it also has information about the Type of the action
+type TypedActionCreator<T> = Type & ActionCreator<T>;    
+</blog-code>
+    <blog-text>Check out the full source on github.</blog-text>
+
+    <br />
+    <blog-heading>2. Think about Dependency Injection</blog-heading>
+    <blog-text>
+        Dependency Injection is one of the core features of Angular. It simplifies a lot for us developers, namely testing and nested dependencies. But nothing comes without a price.    
+    </blog-text>
+    <br />
+    <blog-text>
+        At first sight it seems like a blessing to be able to inject everything everywhere else that easy. The problem I see is that developers stop thinking about the dependencies they are pulling into their components. Think about it:
+    </blog-text>
+    <blog-quote>
+        Do we really want a direct dependency to a 3rd party library in our component? 
+    </blog-quote>
+    <br />
+    <blog-text>
+        This introduces tight coupling. Tight coupling is bad.
+    </blog-text>
+    <br />
+    <blog-text>
+        So we don’t want to have a direct dependency on the state management library in our container components.
+    </blog-text>
+    <br />
+    <b>No:</b><br /><br />
+    <blog-text><i>---shake your head---</i></blog-text>
+    <br/>
+<blog-code>import { Store } from '@ngrx/store'; // <-- u are a bad habit :(
+//
+// CommitsContainer is holding a list of git commits of a given user
+//
+@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer {
+    commits: Observable<Commit[]>;
+    
+    constructor(private store: Store<any>) {
+        this.store.dispatch(new LoadCommitAction('christian'));
+    }
+}</blog-code>
+    <blog-text>
+        Unfortunately this is how its done in every other NgRx example online. 
+        But just because we've been told that container components are the smart ones, 
+        does not necessarily mean that they have to pull in every third party library as a direct dependency. There is a better way.
+    </blog-text>
+    <br />
+    <b>Yes:</b><br /><br />
+    <blog-text><i>---nod in approval---</i></blog-text>
+    <br/>
+<blog-code>import { CommitActions } from '../domain/commit-actions';
+@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer implements OnInit {
+    commits: Observable<Commit[]>;
+        
+    constructor(private commitActions: CommitActions) {
+        this.commitActions.loadCommits({username: 'christian'});
+    }
+}</blog-code>
+    <blog-text>
+        Now we can’t even tell that there is NgRx behind it or even that it is a 
+        Redux pattern we are applying. Just the names of the variables and the name of the types let us assume 
+        that we are doing Redux here. <br />But we could rename those:  
+    </blog-text>
+<blog-code>import { CommitCommands } from '../domain/commit-commands';
+
+@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer implements OnInit {
+    commits: Observable<Commit[]>;
+        
+    constructor(private commands: CommitCommands) {
+        this.commands.loadCommits({username: 'christian'});
+    }
+}    
+</blog-code>
+    <blog-text>
+        I have to admit, the following is just a tiny detail and I still have to think about it. 
+        We could rename the variables to something more meaningful for our business domain. 
+        When we are talking in <b>Redux language</b> and we are within the <b>Redux context</b> the term ‘action’ is definitely valid. 
+        <br/>But when we are in our container components, talking the <b>language of the business</b>, then an action is more like a 
+        command: <blog-inline-code>LOAD_COMMITS</blog-inline-code>. When the command is completed there is an event:
+        <blog-inline-code>LOAD_COMMITS_SUCCESS, LOAD_COMMITS_FAILED</blog-inline-code> fired based on its outcome.
+    </blog-text>
+    <br />
+    <blog-text>
+        Pulling out dependencies also helps us increasing the test stability. 
+        Testing Rule #1 (at least for me) says: <b>Don’t mock what you don’t own.</b> 
+        Why? Because it is out of your control. If something in a third library changes, which we are not aware of, 
+        it eventually breaks all our tests. The tests are breaking then for the wrong reason. 
+        They should break if someone changes behaviour in our application logic and not if the state management 
+        tool got changed. We should have a separate integration test to check <b>only</b> the integration with the state management library. 
+        Those should fail if the library changes in an unexpected way.
+    </blog-text>
+    <br />
+    <blog-text>
+        What did we win? — <b>Loose coupling</b> — <b>Clean Code</b> — <b>Maintainability</b> —  
+        <br/>Want to replace your redux implementation or current 
+        state management solution without going nuts? No problem now :)
+    </blog-text>
+    <br />
+    <blog-text>
+        But how is this even working? Where is the dispatch code? 
+        <br />Let me introduce you to <b>Bound Actions</b>. This is not a new concept, it’s just not widely adopted by the angular community. But it’s definitely worth checking out.
+    </blog-text>
+<blog-code>/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*              FACTORY FUNCTIONS               */
+/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+function createType(type: string): Type {
+    return { type };
+}
+
+function createPayload<T>(payload: T): Payload<T> {
+    return { payload };
+}
+
+function createAction<T>(type: Type, payload: Payload<T>): Action<T> {
+    return { 
+        type: type.type,
+        payload: payload.payload
+    };
+}
+
+function createActionCreator<T>(type: Type): ActionCreator<T> {
+    return (payload: T) => createAction(type, createPayload(payload));  
+}
+
+// binding the action creator to a dispatch function - hiding the dispatch call
+function createBoundActionCreator<T>(actionCreator: ActionCreator<T>, dispatchFn: (action: Action<T>) => void): BoundActionCreator<T> {
+    return (payload: T) => {
+        const action = actionCreator(payload);
+        dispatchFn(action);   
+    };
+}    
+</blog-code>
+    <blog-text>
+        The <blog-inline-code>createBoundActionCreator</blog-inline-code> binds a given <blog-inline-code>ActionCreator</blog-inline-code> to a dispatch function. It returns a function which 
+        takes the payload, then creates the <blog-inline-code>Action</blog-inline-code> and directly dispatches it with the help of the given dispatch function. 
+        So we can hide the NgRx dependency from the action caller.
+        Let's define a bound action in our already existing CommitActions class. Therefor the CommitActions class has to 
+        become an Angular service, which injects the NgRx store and then binds the dispatch function to the action function:    
+    </blog-text>
+
+<blog-code>import { Store } from '@ngrx/store';
+import { Injectable } from '@angular/core';
+
+import { User } from './user';
+import { Commit } from './commit';
+import { createType, createActionCreator, createBoundActionCreator } from '../../state';
 
 
+@Injectable()
+export class CommitActions {
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*              TYPE DEFINITIONS                */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    static LOAD_COMMITS =           createType('[Commits List] Load Commits');
+    static LOAD_COMMITS_SUCCESS =   createType('[Commits List API] Load Commits Succeeded');
+    static LOAD_COMMITS_FAILURE =   createType('[Commits List API] Load Commits Failed');
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*              ACTION CREATORS                 */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    static LoadCommits = createActionCreator<Pick<User, 'username'>>(CommitActions.LOAD_COMMITS);
+    static LoadCommitsSuccess = createActionCreator<Commit[]>(CommitActions.LOAD_COMMITS_SUCCESS);
+    static LoadCommitsFailure = createActionCreator<{}>(CommitActions.LOAD_COMMITS_FAILURE);
+
+    constructor(private store: Store<any>) {}
+
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*              BOUND ACTIONS                   */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    loadCommits = createBoundActionCreator(CommitActions.LoadCommits, this.store.dispatch.bind(this.store));
+}    
+</blog-code>
+        <blog-text>
+            Now the container component does not have an direct dependency to ngrx anymore. This is what we have wanted to achieve.
+        </blog-text>
+<blog-code>import { CommitActions } from '../domain/commit-actions';
+@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer implements OnInit {
+    commits: Observable<Commit[]>;
+        
+    constructor(private commitActions: CommitActions) {
+        this.commitActions.loadCommits({username: 'christian'});
+    }
+}</blog-code>
+
+        <br />
+        <blog-heading>3. Use Selectors</blog-heading>
+        <blog-text>
+            Until now we only have sent of a command to kick off a side effect (sending an HTTP call) and finally 
+            load the commits into the store. But we still have to show them to the user. Therefor we have to select the data from the 
+            Redux store from within our <blog-inline-code>CommitsContainer</blog-inline-code> component. This could be done directly if we inject the store service from NgRx into it.
+Unfortunately with this approach, we get an unwanted dependency to our state management library again. 
+Therefor we create a <blog-inline-code>CommitSelector</blog-inline-code> service, which contains our selectors and can be injected into the 
+container component to effectively hide the NgRx dependency from it.
+        </blog-text>
+<blog-code>// Selectors - Pure Functions
+export const commitsSelector = (state: AppState) => state.commits.commits;
+
+@Injectable()
+export class CommitSelectors {
+    constructor(private store: Store<any>) {}
+
+    selectCommits(): Observable<Commit[]> {
+        return this.store.select(commitsSelector);
+    }
+}</blog-code>
+
+        <blog-text>
+            In the CommitsContainer we can now use this service and select the data and pass it to our presentational component in the template:
+        </blog-text>
+<blog-code>@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer implements OnInit, OnDestroy {
+    commits$: Observable<Commit[]>;
+
+    constructor(private actions: CommitActions,
+                private selectors: CommitSelectors) {
+
+        this.actions.loadCommits({ username: 'yanxch' });
+        this.commits$ = this.selectors.selectCommits();
+    }
+}    
+</blog-code>
+<blog-code><commit-list [commits]="commits$ | async"></commit-list></blog-code>
+        <blog-text>
+            Another really handsome feature of selectors is the ability to combine them. So multiple small selectors can be 
+            combined to a complex one. Ngrx comes with custom <blog-inline-code>createSelector</blog-inline-code> functions. But you could also use the reselect library.
+        </blog-text>
+        <br />
+        <blog-text>
+            Let’s look at an example. In the code above we hardcoded the username. Now we would like to pass it dynamically via a route url param.
+        </blog-text>
+        <br />
+        <blog-text>
+            I have extended the example to use ngrx/router-store to sync the current router state to our ngrx store. 
+            This allows us to use the power of combined selectors, where the routeSelector
+             fetches the router state from the state and the routeParamSelector reads the given route param from it.
+        </blog-text>
+<blog-code>export const routeSelector = createFeatureSelector('router');
+export const routeParamSelector = (paramName: string) => (router: any) => router.state && router.state.params[paramName];
+
+export const usernameSelector = createSelector(
+    routeSelector,
+    routeParamSelector('username')
+);</blog-code>
+        <blog-text>
+            Now we can use the selector in our CommitSelectors service:
+        </blog-text>
+<blog-code>@Injectable()
+export class CommitSelectors {
+    constructor(private store: Store<any>) {}
+
+    selectUsername(): Observable<string> {
+        return this.store.select(usernameSelector);
+    }
+
+    selectCommits(): Observable<Commit[]> {
+        return this.store.select(commitsSelector);
+    }
+}</blog-code>
+        <blog-text>
+            The CommitsContainer describes to username observable and on every change it executes the loadCommits action:
+        </blog-text>
+<blog-code>@Component({
+    selector: 'commits-container',
+    templateUrl: './commits.container.html',
+    styleUrls: ['./commits.container.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommitsContainer implements OnInit, OnDestroy {
+    username$: Observable<string>;
+    commits$: Observable<Commit[]>;
+
+    constructor(private actions: CommitActions,
+                private selectors: CommitSelectors) {
+
+        this.commits$ = this.selectors.selectCommits();
+        this.username$ = this.selectors.selectUsername();
+
+        this.username$
+            .pipe(
+                distinctUntilChanged(),
+                untilComponentDestroyed(this)
+            )
+            .subscribe(username => {
+                this.actions.loadCommits({ username });
+            });
+    }
+
+    ngOnInit() {}
+
+    ngOnDestroy() {}
+}</blog-code>
+
+        <blog-text>
+            We achieved the development of a component that has no direct dependency to the router nor to a state management library. 
+            This is an important step for gaining maintainable, 
+            testable and cleaner code that expresses its business domain more clearly.
+        </blog-text>
+        <br />
+        <blog-text>
+            In the next post I will probably go a step further and introduce a ConnectMixin which will turn our container 
+            components effectively into dumb ones, which just use <blog-inline-code>@Input()</blog-inline-code> and <blog-inline-code>@Output()</blog-inline-code> 
+            to connect to the state.
+        </blog-text>
+        <br />
+        <blog-text>
+            Check out the full source on github.
+        </blog-text>
+        <br />
+        <blog-text>
+            Discuss this with me on Twitter.
+        </blog-text>
+        <br />
+        <blog-text>
+            Have a nice day 
+        </blog-text>
     </blog-text-container>
 </blog-content>
+

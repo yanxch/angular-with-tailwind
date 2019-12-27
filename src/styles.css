@@ -17,3 +17,7 @@
 ul.blog {
   @apply list-disc ml-6 leading-loose;
 }
+
+Ghost svg {
+  display: inline;
+}

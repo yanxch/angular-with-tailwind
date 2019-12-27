@@ -1,5 +1,5 @@
 
-const MATCH_BLOG_CODES = /(<blog-code.*>)([\s\S]*?)(<\/blog-code>)/g;
+const MATCH_BLOG_CODES = /(<blog-code(.*?)>)([\s\S]*?)(<\/blog-code>)/g;
                         //    $1          $2         $3
                         // $1 Opening Code Tag
                         // $2 Anything between including newlines
@@ -22,17 +22,34 @@ export default function transformHtmlLoader(this: any, source: string): string {
   return source.replace(MATCH_BLOG_CODES, replaceBraces);
 }
 
-function replaceBraces(code) {
-    // Step 1 - Replace with distinct characters
-    code = code.replace(OPENING_BRACET_REGEXP, OPENING_BRACET_PRESTEP);
-    code = code.replace(CLOSING_BRACET_REGEXP, CLOSING_BRACET_PRESTEP);
+function replaceBraces(fullmatch, open, nix, code, close) {
+  console.log('OPEN: ' + open);
+  console.log('CODE: ' + code);
+  console.log('CLOSE: ' + close);
+  code = escapeHtml(code);
 
-    // Step 2
-    code = code.replace(OPENING_BRACET_PRESTEP_REGEXP, OPENING_BRACET);
-    code = code.replace(CLOSING_BRACET_PRESTEP_REGEXP, CLOSING_BRACET);
+  // Step 1 - Replace with distinct characters
+  code = code.replace(OPENING_BRACET_REGEXP, OPENING_BRACET_PRESTEP);
+  code = code.replace(CLOSING_BRACET_REGEXP, CLOSING_BRACET_PRESTEP);
 
-    return code;
+  // Step 2 - Replace with correct escaping
+  code = code.replace(OPENING_BRACET_PRESTEP_REGEXP, OPENING_BRACET);
+  code = code.replace(CLOSING_BRACET_PRESTEP_REGEXP, CLOSING_BRACET);
+
+  console.log('ESCAPED CODE: ' + open + code + close);
+
+
+  return open + code + close;
 }
 
 // ({) find opening-brace
 // (}) find closing-brace
+
+function escapeHtml(unsafe) {
+  return unsafe
+       .replace(/&/g, '&amp;')
+       .replace(/</g, '&lt;')
+       .replace(/>/g, '&gt;')
+       .replace(/"/g, '&quot;')
+       .replace(/'/g, '&#039;');
+}

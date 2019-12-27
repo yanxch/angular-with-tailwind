@@ -42,32 +42,17 @@
       </blog-quote>
   
   
-  <blog-code highlightLines="4-7">function filterByLegCount(array, legCount) {
-    return filter(array, animal => animal.legs === legCount)
-  }
-  filterByLegCount(
-    [
-      {name: 'dog', legs: 4, mammal: true},
-      {name: 'dolphin', legs: 0, mammal: true},
-      {name: 'eagle', legs: 2, mammal: false},
-      {name: 'elephant', legs: 4, mammal: true},
-      {name: 'robin', legs: 2, mammal: false},
-      {name: 'cat', legs: 4, mammal: true},
-      {name: 'salmon', legs: 0, mammal: false},
-    ],
-    0,
-  )
-  </blog-code>
+  <blog-code>function filterByLegCount(array, legCount) { 
+  return filter(array, animal => animal.legs === legCount)
+}</blog-code>
   
     <blog-text>
       There are many different terms being used that all try to differentiate between different kinds 
-      of components. Some have the same meaning, <blog-inline-code>Test</blog-inline-code> I've got the feeling that every other developer 
+      of components. Some have the same meaning, Test I've got the feeling that every other developer 
       has a little different view on their intended behavior. Let’s gather the terms:
     </blog-text>
   
   
     </blog-text-container>
   </blog-content>
-  
-  <router-outlet></router-outlet>
-  
+

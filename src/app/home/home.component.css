@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  height: 100vh;
+  border-color: black;
+  @apply bg-gray-100;
+}
