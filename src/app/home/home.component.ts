@@ -11,7 +11,7 @@ import {posts} from './posts-config';
 
           <blog-text><b><a href="#" [routerLink]="post.route">{{ post.title }}</a></b></blog-text>
           <blog-list-date>{{ post.publishedAt }}</blog-list-date>
- 
+
           <blog-text>{{ post.summary }}</blog-text>
           <hr>
         </div>
