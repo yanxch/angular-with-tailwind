@@ -11,10 +11,8 @@
       "prefix": "blog",
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "extraWebpackConfig": "webpack/webpack.partial.js",
-            "plugin": "~dist/out-tsc/loader/plugin.js",
             "outputPath": "dist/angular-with-tailwind",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -29,13 +27,15 @@
               "src/styles.css",
               "src/shades-of-purple.css",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
-
             ],
             "scripts": [
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-typescript.js",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js"
-            ]
+            ],
+            "customWebpackConfig": {
+              "path": "angular-code-builder/angular-code-builder.webpack.js"
+            }
           },
           "configurations": {
             "production": {
@@ -65,11 +65,12 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "extraWebpackConfig": "webpack/webpack.partial.js",
-            "plugin": "~dist/out-tsc/loader/plugin.js",
-            "browserTarget": "angular-with-tailwind:build"
+            "browserTarget": "angular-with-tailwind:build",
+            "customWebpackConfig": {
+              "path": "angular-code-builder/angular-code-builder.webpack.js"
+            }
           },
           "configurations": {
             "production": {
@@ -86,8 +87,6 @@
         "test": {
           "builder": "ngx-build-plus:karma",
           "options": {
-            "extraWebpackConfig": "webpack/webpack.partial.js",
-            "plugin": "~dist/out-tsc/loader/plugin.js",
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
