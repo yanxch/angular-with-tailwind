@@ -4,3 +4,26 @@
   border-color: black;
   @apply bg-gray-100;
 }
+
+:host h1 {
+  font-family: "Landmark Regular A", "Landmark Regular B";
+  font-style: normal;
+  font-weight: 600;
+
+  border-bottom: solid;
+  @apply border-gray-600 text-center;
+}
+
+:host p {
+  font-family: "Landmark Regular A", "Landmark Regular B";
+  font-style: normal;
+  font-weight: 400;
+}
+
+.avatar {
+  @apply h-20 w-20 rounded-full border-solid border-4 border-gray-600 mx-auto mx-3 self-center;
+}
+
+.post-header {
+  @apply flex justify-between;
+}
