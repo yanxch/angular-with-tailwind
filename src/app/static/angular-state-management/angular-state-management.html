@@ -20,7 +20,6 @@
             Add some side effects on the top. Add the routing information to the state. And suddenly:
         </blog-text>
         <blog-image src="../assets/architecture.png" description="Architecture gone wrong .. again"></blog-image>
-        <br />
         <blog-text>
             The code is not maintainable anymore. The Redux architecture had promised to solve the complexity of not knowing where the state of the application is coming from, but now it is really hard to follow the flow of data through your app as well. You get angry. You blame your state management decision or the one that made it.
         </blog-text>
@@ -30,7 +29,6 @@
         <blog-text>
             In this post I present an approach how you can “manage” your state management library. I will use ngrx in my examples, but it doesn’t really matter which redux based library you are using. The concept stays the same. Even plain old services could be used to hold your state.
         </blog-text>
-        <br />
         <blog-heading>1. Use Typescript</blog-heading>
         <blog-text>
             This is a no brainer for Angular developers. Once you have got used to it you don’t want to miss it out any longer. We will use its power to define our typed actions and use them within reducers and effects. So coding errors occur during compile time as we develop and not during runtime. Let’s directly dive into our action types:
@@ -53,7 +51,6 @@ type Action  = Type & Payload;
                 This is a pretty straight forward definition of a generic <blog-inline-code>Action</blog-inline-code> that is combined of the types <blog-inline-code>Type</blog-inline-code> and <blog-inline-code>Payload</blog-inline-code>. 
                 So effectively every object with a structure of <blog-inline-code>{{'{'}} type, payload {{'}'}}</blog-inline-code> confirms to this type.
         </blog-text>
-        <br />
         <blog-text>
                 We could use this now to create a function that returns a specific action and dispatch it then via NgRx <blog-inline-code>store.dispatch</blog-inline-code>:
         </blog-text>
@@ -74,7 +71,6 @@ this.store.dispatch(LoadCommits(user));
         <blog-text>
             Fair enough. This works well for one action creator function, but it’s not really satisfying. We didn’t take reducers and effects under consideration and when the application grows we would have to write a lot of boilerplate and duplicate code.
         </blog-text>
-        <br/>
         <blog-text>
             Let’s improve our design with some factory functions. They help us to cut the boilerplate down a little bit:
         </blog-text>
@@ -214,12 +210,10 @@ type TypedActionCreator<T> = Type & ActionCreator<T>;
 </blog-code>
     <blog-text>Check out the full source on github.</blog-text>
 
-    <br />
     <blog-heading>2. Think about Dependency Injection</blog-heading>
     <blog-text>
         Dependency Injection is one of the core features of Angular. It simplifies a lot for us developers, namely testing and nested dependencies. But nothing comes without a price.    
     </blog-text>
-    <br />
     <blog-text>
         At first sight it seems like a blessing to be able to inject everything everywhere else that easy. The problem I see is that developers stop thinking about the dependencies they are pulling into their components. Think about it:
     </blog-text>
@@ -230,7 +224,6 @@ type TypedActionCreator<T> = Type & ActionCreator<T>;
     <blog-text>
         This introduces tight coupling. Tight coupling is bad.
     </blog-text>
-    <br />
     <blog-text>
         So we don’t want to have a direct dependency on the state management library in our container components.
     </blog-text>
@@ -307,7 +300,6 @@ export class CommitsContainer implements OnInit {
         command: <blog-inline-code>LOAD_COMMITS</blog-inline-code>. When the command is completed there is an event:
         <blog-inline-code>LOAD_COMMITS_SUCCESS, LOAD_COMMITS_FAILED</blog-inline-code> fired based on its outcome.
     </blog-text>
-    <br />
     <blog-text>
         Pulling out dependencies also helps us increasing the test stability. 
         Testing Rule #1 (at least for me) says: <b>Don’t mock what you don’t own.</b> 
@@ -317,13 +309,11 @@ export class CommitsContainer implements OnInit {
         tool got changed. We should have a separate integration test to check <b>only</b> the integration with the state management library. 
         Those should fail if the library changes in an unexpected way.
     </blog-text>
-    <br />
     <blog-text>
         What did we win? — <b>Loose coupling</b> — <b>Clean Code</b> — <b>Maintainability</b> —  
         <br/>Want to replace your redux implementation or current 
         state management solution without going nuts? No problem now :)
     </blog-text>
-    <br />
     <blog-text>
         But how is this even working? Where is the dispatch code? 
         <br />Let me introduce you to <b>Bound Actions</b>. This is not a new concept, it’s just not widely adopted by the angular community. But it’s definitely worth checking out.
@@ -415,7 +405,6 @@ export class CommitsContainer implements OnInit {
     }
 }</blog-code>
 
-        <br />
         <blog-heading>3. Use Selectors</blog-heading>
         <blog-text>
             Until now we only have sent of a command to kick off a side effect (sending an HTTP call) and finally 
@@ -462,11 +451,9 @@ export class CommitsContainer implements OnInit, OnDestroy {
             Another really handsome feature of selectors is the ability to combine them. So multiple small selectors can be 
             combined to a complex one. Ngrx comes with custom <blog-inline-code>createSelector</blog-inline-code> functions. But you could also use the reselect library.
         </blog-text>
-        <br />
         <blog-text>
             Let’s look at an example. In the code above we hardcoded the username. Now we would like to pass it dynamically via a route url param.
         </blog-text>
-        <br />
         <blog-text>
             I have extended the example to use ngrx/router-store to sync the current router state to our ngrx store. 
             This allows us to use the power of combined selectors, where the routeSelector
@@ -533,21 +520,17 @@ export class CommitsContainer implements OnInit, OnDestroy {
             This is an important step for gaining maintainable, 
             testable and cleaner code that expresses its business domain more clearly.
         </blog-text>
-        <br />
         <blog-text>
             In the next post I will probably go a step further and introduce a ConnectMixin which will turn our container 
             components effectively into dumb ones, which just use <blog-inline-code>@Input()</blog-inline-code> and <blog-inline-code>@Output()</blog-inline-code> 
             to connect to the state.
         </blog-text>
-        <br />
         <blog-text>
             Check out the full source on github.
         </blog-text>
-        <br />
         <blog-text>
             Discuss this with me on Twitter.
         </blog-text>
-        <br />
         <blog-text>
             Have a nice day 
         </blog-text>

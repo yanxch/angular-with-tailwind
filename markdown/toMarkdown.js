@@ -118,9 +118,6 @@ var processor = unified()
         }
       
         return h(node.position, 'blog-code', [u('text', value)])
-      },
-      hardBreak: function (h, node) {
-        return [h(node, 'br'), u('text', '\n')]
       }
     }
   })

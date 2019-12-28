@@ -6,7 +6,7 @@
 
 <blog-text-container>
 
-Many people rant about the boilerplate 
+Many people rant about the boilerplate   
 that is produced when introducing a redux based state management library in an Angular application. All I can respond to that is:
 
 
