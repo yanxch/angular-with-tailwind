@@ -5,7 +5,7 @@ export const posts = [
     summary: `Many developers rant about the boilerplate that is produced when introducing a redux 
       based state management library in their Angular application. I can understand those developers
       because every abstraction has its price and state management can become hairy really fast.`,
-    publishedAt: '2018-12-12',
+    publishedAt: '02.06.2018',
     route: 'angular-state-management'
   }
 ];
