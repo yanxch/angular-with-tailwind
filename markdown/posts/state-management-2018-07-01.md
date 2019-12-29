@@ -9,10 +9,6 @@
 Many people rant about the boilerplate   
 that is produced when introducing a redux based state management library in an Angular application. All I can respond to that is:
 
-
-
-
-
 > Don’t fear the boilerplate. Fear tight coupling!
 
 Though, I can understand those people, they are right in some way. State management can become hairy really fast. Especially if your are working in a bigger team with different levels of experience.
@@ -46,5 +42,8 @@ type Payload<T> = {
 
 type Action<T>  = Type & Payload<T>;
 ```
+
+Look at the source on [Github](https://github.com/yanxch/loading-sample).
+
 </blog-text-container>
 </blog-content>

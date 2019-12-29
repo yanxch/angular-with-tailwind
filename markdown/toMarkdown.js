@@ -10,6 +10,8 @@ var wrap = require('mdast-util-to-hast/lib/wrap');
 var detab = require('detab');
 var u = require('unist-builder');
 var trimLines = require('trim-lines')
+var normalize = require('mdurl/encode')
+
 
 var processor = unified()
   .use(markdown, {
@@ -99,6 +101,10 @@ var processor = unified()
           return h(node, 'blog-sub-title', all(h, node))
         }
 
+        if (node.depth === 3) {
+          return h(node, 'blog-heading', all(h, node))
+        }
+
         return h(node, 'h' + node.depth, all(h, node))
       },
       list: list,
@@ -114,10 +120,21 @@ var processor = unified()
         var props = {}
       
         if (lang) {
-          props.className = ['language-' + lang]
+          props.language = [lang]
         }
       
-        return h(node.position, 'blog-code', [u('text', value)])
+        return h(node.position, 'blog-code', props, [u('text', value)])
+      },
+      link: function(h, node) {
+        var props = {href: normalize(node.url)}
+
+        if (node.title !== null && node.title !== undefined) {
+          props.title = node.title
+        }
+
+        props.target = ["_blank"]
+      
+        return h(node, 'a', props, all(h, node))
       }
     }
   })

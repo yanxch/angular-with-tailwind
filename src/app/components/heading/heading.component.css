@@ -8,5 +8,6 @@
   margin-bottom: 1em;
   margin-top: 1.5em;
 
+
   @apply max-w-2xl  pt-0 text-2xl text-gray-700 text-left;
 }
