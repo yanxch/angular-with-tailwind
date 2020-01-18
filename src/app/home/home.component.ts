@@ -12,7 +12,7 @@ import {posts} from './posts-config';
 
         </div>
         <div class="md:flex justify-center mb-10">
-          <p>I like to write on software topics!</p>
+          <p>I like to write about software topics!</p>
           <a href="https://twitter.com/y_a_n_x" target="_blank" class="self-center"><img class="h-6 w-6 mx-3" src="/assets/twitter.svg"></a>
         </div>
         <div *ngFor="let post of posts">
