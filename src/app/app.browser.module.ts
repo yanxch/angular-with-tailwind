@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, BrowserTransferStateModule} from '@angular/platform-browser';
 import {AngularKawaiiModule} from 'angular-kawaii';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -18,45 +18,18 @@ import {ReusableContainersComponent} from './static/reusable-containers';
 import {HomeComponent} from './home/home.component';
 import {BlogListDateComponent} from './components/blog-list-date/blog-list-date.component';
 import {BlogSummaryComponent} from './components/blog-summary/blog-summary.component';
-import { CommonModule } from '@angular/common';
-import { TransferHttpCacheModule } from '@nguniversal/common';
-import { HttpClientModule } from '@angular/common/http';
-import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { AppModule } from './app.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TitleComponent,
-    SubTitleComponent,
-    TextContainerComponent,
-    TextComponent,
-    BlogSummaryComponent,
-    BlogContentComponent,
-    CodeComponent,
-    QuoteComponent,
-    InlineCodeComponent,
-    BlogImageComponent,
-    HeadingComponent,
-    BlogListDateComponent,
-
-    //
-    //
-    AngularStateManagementComponent,
-    ReusableContainersComponent,
-    //
-    HomeComponent
-  ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    
     AppRoutingModule,
     AngularKawaiiModule,
-    CommonModule,
-    TransferHttpCacheModule,
-    HttpClientModule,
-    NgtUniversalModule
+    AppModule,
+    BrowserTransferStateModule
   ],
   providers: [],
   bootstrap: [AppComponent],
   schemas: []
 })
-export class AppModule { }
+export class AppBrowserModule { }
